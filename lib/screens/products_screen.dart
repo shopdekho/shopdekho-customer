@@ -56,7 +56,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   selectedColor: AppColors.leaf,
                   labelStyle: TextStyle(
                     color: active ? Colors.white : AppColors.ink,
-                    fontWeight: FontWeight.w650,
+                    fontWeight: FontWeight.w600,
                     fontSize: 12.5,
                   ),
                   backgroundColor: AppColors.paper,
@@ -305,7 +305,7 @@ class _GridProductCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                     decoration: BoxDecoration(color: AppColors.leaf, borderRadius: BorderRadius.circular(6)),
-                    child: Text('${product.discountPercent}% OFF', style: const TextStyle(color: Colors.white, fontSize: 7.5, fontWeight: FontWeight.w750)),
+                    child: Text('${product.discountPercent}% OFF', style: const TextStyle(color: Colors.white, fontSize: 7.5, fontWeight: FontWeight.w700)),
                   ),
                 ),
             ],
