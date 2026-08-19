@@ -1,8 +1,6 @@
-    import 'dart:math';
+import 'dart:math';
 import 'package:geolocator/geolocator.dart';
-
 enum LocationFailure { unsupported, permissionDenied, other }
-
 class LocationException implements Exception {
   final LocationFailure reason;
   LocationException(this.reason);
