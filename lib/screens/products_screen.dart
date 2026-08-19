@@ -318,7 +318,7 @@ class _GridProductCard extends StatelessWidget {
                 style: const TextStyle(fontSize: 9, color: AppColors.inkSoft)),
           const SizedBox(height: 4),
           Row(children: [
-            Text('₹${product.price.toStringAsFixed(0)}${product.priceSuffix}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w750)),
+            Text('₹${product.price.toStringAsFixed(0)}${product.priceSuffix}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
             if (product.mrp != null) ...[
               const SizedBox(width: 4),
               Text('₹${product.mrp!.toStringAsFixed(0)}',
@@ -365,12 +365,12 @@ class _ListProductCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(product.nameHi.isNotEmpty ? product.nameHi : product.name,
-                    style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w750)),
+                    style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
                 if (product.nameHi.isNotEmpty)
                   Text(product.name, style: const TextStyle(fontSize: 12, color: AppColors.inkSoft)),
                 const SizedBox(height: 4),
                 Row(children: [
-                  Text('₹${product.price.toStringAsFixed(0)}${product.priceSuffix}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w750)),
+                  Text('₹${product.price.toStringAsFixed(0)}${product.priceSuffix}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
                   if (product.mrp != null) ...[
                     const SizedBox(width: 6),
                     Text('₹${product.mrp!.toStringAsFixed(0)}',
