@@ -373,7 +373,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(it.$3, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10.8, fontWeight: FontWeight.w700)),
-                        Text(ok ? it.$4 : it.$5, style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w650, color: ok ? AppColors.green : AppColors.red)),
+                        Text(ok ? it.$4 : it.$5, style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w600, color: ok ? AppColors.green : AppColors.red)),
                       ],
                     ),
                   ),
@@ -518,11 +518,11 @@ class _ShopScreenState extends State<ShopScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(l1, style: const TextStyle(fontSize: 9.5, color: AppColors.inkSoft, fontWeight: FontWeight.w650)),
-        Text(v1, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w650)),
+        Text(l1, style: const TextStyle(fontSize: 9.5, color: AppColors.inkSoft, fontWeight: FontWeight.w600)),
+        Text(v1, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600)),
         const SizedBox(height: 9),
-        Text(l2, style: const TextStyle(fontSize: 9.5, color: AppColors.inkSoft, fontWeight: FontWeight.w650)),
-        Text(v2, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w650)),
+        Text(l2, style: const TextStyle(fontSize: 9.5, color: AppColors.inkSoft, fontWeight: FontWeight.w600)),
+        Text(v2, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600)),
       ],
     );
   }
