@@ -52,7 +52,7 @@ class CartScreen extends StatelessWidget {
                         return TableRow(children: [
                           Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: Text(it.product.name, style: const TextStyle(fontSize: 12.5))),
                           Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: Text('${fmt.value} ${fmt.label}', style: const TextStyle(fontSize: 12.5))),
-                          Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: Text('₹${it.subtotal.toStringAsFixed(2)}', textAlign: TextAlign.right, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w750))),
+                          Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: Text('₹${it.subtotal.toStringAsFixed(2)}', textAlign: TextAlign.right, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700))),
                         ]);
                       }),
                     ],
@@ -123,7 +123,7 @@ class CartScreen extends StatelessWidget {
                 children: [
                   const Text('🛒', style: TextStyle(fontSize: 48)),
                   const SizedBox(height: 10),
-                  const Text('Your cart is empty', style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w750)),
+                  const Text('Your cart is empty', style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 6),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 40),
@@ -178,7 +178,7 @@ class CartScreen extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                                  Text('₹${it.subtotal.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.w750, fontSize: 13.5)),
+                                  Text('₹${it.subtotal.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5)),
                                   IconButton(
                                     icon: const Icon(Icons.close, size: 16, color: AppColors.red),
                                     onPressed: () => cart.remove(it.product.id),
