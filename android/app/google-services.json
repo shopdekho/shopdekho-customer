@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "149225066853",
+    "project_id": "shop-dekho",
+    "storage_bucket": "shop-dekho.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149225066853:android:32f95bebe63c7f84b9518c",
+        "android_client_info": {
+          "package_name": "com.example.shopdekho_customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "149225066853-ian4ddnvd0dqrbtpjeeb5nlbinu2i6it.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaeU5mvsEUj4SAERwgATfuc6joNmGnK_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "149225066853-ian4ddnvd0dqrbtpjeeb5nlbinu2i6it.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "149225066853-umoailhv4mble48i9hng9lk6p9loojq6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.shopdekhoCustomer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
