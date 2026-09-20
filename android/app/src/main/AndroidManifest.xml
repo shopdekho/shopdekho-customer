@@ -39,6 +39,15 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <!-- Makes ML Kit auto-download its barcode-scanning model on
+             install/first-run. Without this, side-loaded APKs (installed
+             outside the Play Store, e.g. via GitHub Actions) don't get the
+             model downloaded automatically, and mobile_scanner crashes
+             with a generic camera error. -->
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="barcode" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
