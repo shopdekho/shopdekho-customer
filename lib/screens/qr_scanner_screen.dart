@@ -95,7 +95,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                     // denied / unsupported / already-in-use / etc.)
                     // instead of the generic "!" icon. Remove this
                     // errorBuilder once the camera works.
-                    errorBuilder: (context, error) {
+                    errorBuilder: (context, error, child) {
                       return Container(
                         color: Colors.black,
                         padding: const EdgeInsets.all(24),
