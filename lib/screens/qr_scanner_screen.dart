@@ -88,7 +88,33 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  MobileScanner(controller: _controller, onDetect: _onDetect),
+                  MobileScanner(
+                    controller: _controller,
+                    onDetect: _onDetect,
+                    // TEMPORARY DEBUG — shows the real error (permission
+                    // denied / unsupported / already-in-use / etc.)
+                    // instead of the generic "!" icon. Remove this
+                    // errorBuilder once the camera works.
+                    errorBuilder: (context, error) {
+                      return Container(
+                        color: Colors.black,
+                        padding: const EdgeInsets.all(24),
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.error_outline, color: Colors.red, size: 48),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Camera error:\n${error.errorCode}\n\n${error.errorDetails?.message ?? 'no details'}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.white, fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                   Container(
                     width: 260,
                     height: 260,
