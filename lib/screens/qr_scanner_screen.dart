@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'shop_screen.dart';
 import 'search_screen.dart';
 
@@ -11,9 +11,11 @@ class QrScannerScreen extends StatefulWidget {
 
 class _QrScannerScreenState extends State<QrScannerScreen> {
   // Only accepts https://shopdekho.the-web.top/s/{SHOP_ID} — same as the
-  // website's validateShopDekhoQrUrl(), no custom/alternate QR format.
+  // website's own QR validation, no custom/alternate QR format.
   static const _hostname = 'shopdekho.the-web.top';
-  final _controller = MobileScannerController();
+
+  final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
+  QRViewController? _controller;
   bool _handled = false;
   String? _errorText;
 
@@ -30,28 +32,40 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
     }
   }
 
-  void _onDetect(BarcodeCapture capture) {
-    if (_handled) return;
-    final raw = capture.barcodes.isNotEmpty ? capture.barcodes.first.rawValue : null;
-    if (raw == null) return;
+  void _onQRViewCreated(QRViewController controller) {
+    _controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      final raw = scanData.code;
+      if (_handled || raw == null) return;
 
-    final shopId = _validate(raw);
-    if (shopId == null) {
-      setState(() => _errorText = 'Invalid ShopDekho QR');
-      Future.delayed(const Duration(seconds: 2), () {
-        if (mounted) setState(() => _errorText = null);
-      });
-      return;
-    }
+      final shopId = _validate(raw);
+      if (shopId == null) {
+        setState(() => _errorText = 'Invalid ShopDekho QR');
+        Future.delayed(const Duration(seconds: 2), () {
+          if (mounted) setState(() => _errorText = null);
+        });
+        return;
+      }
 
-    _handled = true;
-    _controller.stop();
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ShopScreen(shopId: shopId)));
+      _handled = true;
+      controller.pauseCamera();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => ShopScreen(shopId: shopId)),
+      );
+    });
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    _controller?.pauseCamera();
+    _controller?.resumeCamera();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -69,17 +83,24 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                   IconButton(
                     onPressed: () => Navigator.pop(context),
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    style: IconButton.styleFrom(backgroundColor: Colors.white.withOpacity(.12)),
+                    style: IconButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(.12)),
                   ),
                   const Expanded(
-                    child: Text('Scan Shop QR',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Color(0xFF3DBE68), fontWeight: FontWeight.w700, fontSize: 16)),
+                    child: Text(
+                      'Scan Shop QR',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Color(0xFF3DBE68),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16),
+                    ),
                   ),
                   IconButton(
-                    onPressed: () => _controller.toggleTorch(),
+                    onPressed: () => _controller?.toggleFlash(),
                     icon: const Icon(Icons.bolt, color: Colors.white),
-                    style: IconButton.styleFrom(backgroundColor: Colors.white.withOpacity(.12)),
+                    style: IconButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(.12)),
                   ),
                 ],
               ),
@@ -88,43 +109,19 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  MobileScanner(
-                    controller: _controller,
-                    onDetect: _onDetect,
-                    // TEMPORARY DEBUG — shows the real error (permission
-                    // denied / unsupported / already-in-use / etc.)
-                    // instead of the generic "!" icon. Remove this
-                    // errorBuilder once the camera works.
-                    errorBuilder: (context, error, child) {
-                      return Container(
-                        color: Colors.black,
-                        padding: const EdgeInsets.all(24),
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.error_outline, color: Colors.red, size: 48),
-                            const SizedBox(height: 16),
-                            Text(
-                              'Camera error:\n${error.errorCode}\n\n${error.errorDetails?.message ?? 'no details'}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.white, fontSize: 13),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                  Container(
-                    width: 260,
-                    height: 260,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xFF3DBE68), width: 3),
-                      borderRadius: BorderRadius.circular(16),
+                  QRView(
+                    key: _qrKey,
+                    onQRViewCreated: _onQRViewCreated,
+                    overlay: QrScannerOverlayShape(
+                      borderColor: const Color(0xFF3DBE68),
+                      borderRadius: 16,
+                      borderLength: 30,
+                      borderWidth: 8,
+                      cutOutSize: 260,
                     ),
                   ),
                   const Positioned(
-                    top: 60,
+                    top: 20,
                     child: _Pill(text: 'Scan the ShopDekho QR code'),
                   ),
                   if (_errorText != null)
@@ -136,9 +133,13 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                     bottom: 20,
                     child: TextButton(
                       onPressed: () => Navigator.pushReplacement(
-                          context, MaterialPageRoute(builder: (_) => const SearchScreen())),
-                      child: const Text('Search Shop ID instead',
-                          style: TextStyle(color: Colors.white70)),
+                        context,
+                        MaterialPageRoute(builder: (_) => const SearchScreen()),
+                      ),
+                      child: const Text(
+                        'Search Shop ID instead',
+                        style: TextStyle(color: Colors.white70),
+                      ),
                     ),
                   ),
                 ],
@@ -164,7 +165,9 @@ class _Pill extends StatelessWidget {
         color: isError ? Colors.red.withOpacity(.75) : Colors.black.withOpacity(.55),
         borderRadius: BorderRadius.circular(99),
       ),
-      child: Text(text, style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.w600)),
+      child: Text(text,
+          style: const TextStyle(
+              color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.w600)),
     );
   }
 }
