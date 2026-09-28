@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import '../models/home_theme.dart';
+import '../services/notification_service.dart';
 import '../services/remote_config_service.dart';
 import '../theme/app_theme.dart';
 import 'nearby_screen.dart';
+import 'notifications_screen.dart';
 import 'qr_scanner_screen.dart';
 import 'search_screen.dart';
 
@@ -17,7 +19,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _locationEnabled = false;
-  int _notificationCount = 3;
 
   final PageController _bannerController = PageController();
   Timer? _bannerTimer;
@@ -300,63 +301,82 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
 
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Container(
-                          width: 42,
-                          height: 42,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: AppColors.line,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(.04),
-                                blurRadius: 8,
-                                offset: const Offset(0, 3),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(21),
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const NotificationsScreen(),
+                          ),
+                        );
+                        // Badge already clears itself via unreadCount
+                        // (ValueNotifier) when the inbox screen opens —
+                        // nothing else to do here on return.
+                      },
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            width: 42,
+                            height: 42,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: AppColors.line,
                               ),
-                            ],
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(.04),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.notifications_none_rounded,
+                              size: 21,
+                              color: AppColors.ink,
+                            ),
                           ),
-                          child: const Icon(
-                            Icons.notifications_none_rounded,
-                            size: 21,
-                            color: AppColors.ink,
-                          ),
-                        ),
 
-                        if (_notificationCount > 0)
-                          Positioned(
-                            top: -3,
-                            right: -3,
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
-                                color: Color(0xFFE23E3E),
-                                shape: BoxShape.circle,
-                                border: Border.fromBorderSide(
-                                  BorderSide(color: Colors.white, width: 2),
+                          ValueListenableBuilder<int>(
+                            valueListenable: NotificationService.unreadCount,
+                            builder: (context, count, _) {
+                              if (count <= 0) return const SizedBox.shrink();
+                              return Positioned(
+                                top: -3,
+                                right: -3,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFE23E3E),
+                                    shape: BoxShape.circle,
+                                    border: Border.fromBorderSide(
+                                      BorderSide(color: Colors.white, width: 2),
+                                    ),
+                                  ),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 20,
+                                    minHeight: 20,
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    count > 9 ? '9+' : '$count',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w800,
+                                      height: 1,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              constraints: const BoxConstraints(
-                                minWidth: 20,
-                                minHeight: 20,
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                '$_notificationCount',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w800,
-                                  height: 1,
-                                ),
-                              ),
-                            ),
+                              );
+                            },
                           ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
