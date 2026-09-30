@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../models/shop.dart';
 import '../models/product.dart';
@@ -40,6 +41,10 @@ class _ShopScreenState extends State<ShopScreen> {
   // whenever this is null, so the page never looks broken while waiting.
   Map<String, dynamic>? _remoteShopThemes;
 
+  // null = not computed yet (falls back to "Tap to check distance").
+  // Once computed, holds text like "14 m away" or "2.3 km away".
+  String? _distanceText;
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +53,57 @@ class _ShopScreenState extends State<ShopScreen> {
 
     _load();
     _loadRemoteShopThemes();
+  }
+
+  /// Same idea as the website: gets the phone's current location and
+  /// shows the real distance to the shop instead of a "tap to check"
+  /// prompt. Silently falls back (leaves _distanceText null) if location
+  /// permission isn't granted or the fetch fails — the tap-to-open-maps
+  /// behaviour still works either way.
+  Future<void> _loadDistance() async {
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return;
+
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        return;
+      }
+
+      final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.medium,
+      );
+
+      final shop = _shop;
+      final lat = shop?.latitude;
+      final lng = shop?.longitude;
+      if (lat == null || lng == null) return;
+
+      final meters = Geolocator.distanceBetween(
+        position.latitude,
+        position.longitude,
+        lat,
+        lng,
+      );
+
+      if (!mounted) return;
+      setState(() => _distanceText = _formatDistance(meters));
+    } catch (_) {
+      // No permission, location off, or GPS timeout — leave the
+      // "Tap to check distance" fallback in place.
+    }
+  }
+
+  // Same thresholds as formatDistance() on the discovery worker/website.
+  String _formatDistance(double meters) {
+    if (meters < 1000) {
+      return '${meters.round()} m away';
+    }
+    return '${(meters / 1000).toStringAsFixed(1)} km away';
   }
 
   Future<void> _loadRemoteShopThemes() async {
@@ -97,6 +153,10 @@ class _ShopScreenState extends State<ShopScreen> {
       // Fire-and-forget — this shop's customers will now get its
       // notifications too. Never blocks the UI or throws if it fails.
       NotificationService.subscribeToShop(widget.shopId);
+
+      // Fire-and-forget — silently no-ops if permission/GPS isn't
+      // available, falling back to "Tap to check distance".
+      _loadDistance();
     } catch (e) {
       if (!mounted) return;
 
@@ -685,7 +745,7 @@ class _ShopScreenState extends State<ShopScreen> {
                         const SizedBox(height: 3),
 
                         Text(
-                          'Store ID: ${widget.shopId}',
+                          'Shop ID: ${widget.shopId}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -764,7 +824,7 @@ class _ShopScreenState extends State<ShopScreen> {
                             const SizedBox(width: 3),
                             Flexible(
                               child: Text(
-                                'Tap to check distance',
+                                _distanceText ?? 'Tap to check distance',
                                 maxLines: 1,
                                 overflow:
                                     TextOverflow.ellipsis,
