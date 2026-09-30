@@ -781,14 +781,44 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBenefits() {
     final items = _theme.benefits;
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (int i = 0; i < items.length; i++) ...[
-          if (i != 0) const SizedBox(width: 10),
-          Expanded(child: _BenefitCard(data: items[i])),
-        ],
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Below this width, 4-in-a-row gets too cramped on a phone —
+        // switch to a 2x2 grid instead. Wider screens (tablet/laptop/web)
+        // keep the single row.
+        const narrowBreakpoint = 420.0;
+        final isNarrow = constraints.maxWidth < narrowBreakpoint;
+
+        if (!isNarrow) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (int i = 0; i < items.length; i++) ...[
+                if (i != 0) const SizedBox(width: 10),
+                Expanded(child: _BenefitCard(data: items[i])),
+              ],
+            ],
+          );
+        }
+
+        return Column(
+          children: [
+            for (int row = 0; row * 2 < items.length; row++) ...[
+              if (row != 0) const SizedBox(height: 10),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: _BenefitCard(data: items[row * 2])),
+                  if (row * 2 + 1 < items.length) ...[
+                    const SizedBox(width: 10),
+                    Expanded(child: _BenefitCard(data: items[row * 2 + 1])),
+                  ],
+                ],
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 
