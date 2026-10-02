@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
+import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
@@ -332,7 +333,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       children: [
                         _buildShopCard(shop, theme),
 
-                        const SizedBox(height: 2),
+                        const SizedBox(height: 13),
 
                         _buildContactRow(theme),
 
@@ -915,7 +916,7 @@ class _ShopScreenState extends State<ShopScreen> {
       decoration: BoxDecoration(
         color: isOpen
             ? theme.light
-            : const Color(0xFFFFEEEE),
+           : const Color(0xFFFFEEEE),	
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -962,7 +963,8 @@ class _ShopScreenState extends State<ShopScreen> {
             child: SizedBox(
               height: 48,
               child: DecoratedBox(
-                decoration: BoxDecoration(
+  
+            decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [theme.mid, theme.dark],
                     begin: Alignment.centerLeft,
@@ -976,7 +978,8 @@ class _ShopScreenState extends State<ShopScreen> {
                       offset: const Offset(0, 6),
                     ),
                   ],
-                ),
+                ), 
+
                 child: ElevatedButton.icon(
                   onPressed: _call,
                   icon: const Icon(
@@ -1080,21 +1083,25 @@ class _ShopScreenState extends State<ShopScreen> {
           // deliberately not the muted theme tint, so it pops the way it
           // does on the website regardless of category.
           gradient: const LinearGradient(
-            colors: [Color(0xFFEEF8C4), Color(0xFFDCEF8E)],
-            begin: Alignment.topLeft,
+            colors: [ 
+	               Color(0xFFB5C878),
+                  Color(0xFFD9E885),
+                  Color(0xFFC0D27C), 
+	              ],
+	        begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: const Color(0xFFCFE07A),
-          ),
+          //border: Border.all(
+          //  color: const Color(0xFFCFE07A),
+         // ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFFCFE07A).withOpacity(.35),
-              blurRadius: 14,
-              offset: const Offset(0, 6),
+              color: const Color(0x33000000).withOpacity(.35),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
             ),
-          ],
+          ],   
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -1726,25 +1733,24 @@ class _ShopScreenState extends State<ShopScreen> {
       ),
       child: Container(
         padding: const EdgeInsets.all(17),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [theme.light, theme.tint],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius:
-              BorderRadius.circular(22),
-          border: Border.all(
-            color: theme.light,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: theme.primary.withOpacity(.08),
-              blurRadius: 18,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
+		decoration: BoxDecoration(
+  color: theme.light,
+  borderRadius: BorderRadius.circular(15),
+  border: Border.all(
+    color: const Color(0xFFD5E2D9),
+    width: 1,
+  ),
+  boxShadow: [
+    BoxShadow(
+      color: theme.primary.withOpacity(.18),
+      offset: const Offset(1, 0),
+      blurRadius: 20,
+      spreadRadius: 4,
+      inset: true,
+    ),
+  ],
+),
+		
         child: Column(
           crossAxisAlignment:
               CrossAxisAlignment.start,
@@ -1943,7 +1949,9 @@ class _ShopScreenState extends State<ShopScreen> {
       child: Container(
         height: 150,
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
+		
+		
+      /*  decoration: BoxDecoration(
           color: Colors.white,
           borderRadius:
               BorderRadius.circular(22),
@@ -1957,7 +1965,27 @@ class _ShopScreenState extends State<ShopScreen> {
               offset: const Offset(0, 8),
             ),
           ],
-        ),
+        ), */
+		
+		
+		decoration: BoxDecoration(
+  color: const Color(0xFFE5E5E5),
+  borderRadius: BorderRadius.circular(15),
+  border: Border.all(
+    color: const Color(0xFFD5E2D9),
+    width: 1,
+  ),
+  boxShadow: [
+    BoxShadow(
+      color: const Color(0x668FA99A),
+      offset: const Offset(1, 0),
+      blurRadius: 17,
+      spreadRadius: 5,
+      inset: true,
+    ),
+  ],
+),
+		
         child: Row(
           children: [
             Expanded(
