@@ -131,12 +131,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildHeroCarousel(),
+                    					
+					_buildHeroCarousel(),
 
-                    const SizedBox(height: 18),
+					const SizedBox(height: 14),
 
-                    _buildPrimaryActions(),
+					_buildOfferBanner(),
 
+					const SizedBox(height: 18),
+
+					_buildPrimaryActions(),
+					
                     const SizedBox(height: 26),
 
                     _buildSectionTitle(),
@@ -500,6 +505,112 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+
+
+
+
+
+  // ----------------------------------------------------------
+  // OFFER BANNER (fully controlled from JSON's "offer" section)
+  // ----------------------------------------------------------
+/*
+  Widget _buildOfferBanner() {
+    final offer = _theme.offer;
+    if (!offer.enabled) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 18),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [offer.backgroundStart, offer.backgroundEnd],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: offer.accentColor.withOpacity(.18)),
+          boxShadow: [
+            BoxShadow(
+              color: offer.accentColor.withOpacity(.16),
+              blurRadius: 18,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 46,
+              height: 46,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: offer.accentColor.withOpacity(.20),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Icon(offer.icon, color: offer.accentColor, size: 22),
+            ),
+            const SizedBox(width: 13),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: offer.accentColor,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      offer.badge,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 9,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: .5,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 9),
+                  Text(
+                    offer.title,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      height: 1.25,
+                      color: offer.accentColor,
+                    ),
+                  ),
+                  if (offer.subtitle.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      offer.subtitle,
+                      style: const TextStyle(
+                        fontSize: 11.5,
+                        color: AppColors.inkSoft,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  } */
+
+
+
+
   // ----------------------------------------------------------
   // HERO AUTO SLIDER
   // ----------------------------------------------------------
@@ -574,7 +685,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
         // Dark green gradient over image, heavier on the left for text
         // readability (matches the darker, more solid banner look).
-        Container(
+	 Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
@@ -665,6 +776,488 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ],
+    );
+  }
+  
+  
+  
+  
+  
+  
+  
+  // ----------------------------------------------------------
+// PREMIUM OFFER / DISCOUNT BANNER
+// Fully controlled by remote JSON
+// ----------------------------------------------------------
+
+Widget _buildOfferBanner() {
+    final offer = _theme.offer;
+
+    if (!offer.enabled) {
+      return const SizedBox.shrink();
+    }
+
+    // Offer colours are JSON controlled.
+    final backgroundStart = offer.backgroundStart;
+    final backgroundEnd = offer.backgroundEnd;
+    final accent = offer.accentColor;
+
+    const backgroundMid = Color(0xFFFFE4A4);
+    const titleColor = Color(0xFF242424);
+    const amountColor = Color(0xFFE8460D);
+    const discountLabelColor = Color(0xFF8D2112);
+    const subtitleColor = Color(0x804A3421);
+
+    return Container(
+      width: double.infinity,
+      constraints: const BoxConstraints(
+        minHeight: 150,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(22),
+        gradient: LinearGradient(
+          colors: [
+            backgroundStart,
+            backgroundMid,
+            backgroundEnd,
+          ],
+          stops: const [0.0, 0.56, 1.0],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+       /* border: Border.all(
+          color: accent.withOpacity(.38),
+          width: 1,
+        ), */
+        boxShadow: [
+          BoxShadow(
+            color: accent.withOpacity(.20),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(22),
+        child: Stack(
+          children: [
+		  
+		  
+		  
+		  // OFFER BACKGROUND IMAGE
+/*Positioned.fill(
+  child: Image.network(
+    offer.offerBackgroundImage,
+    fit: BoxFit.cover,
+  ),
+), */
+		
+
+Positioned(
+  left: 0,
+  right: 0,
+  top: -10,
+  bottom: 0,
+  child: Image.network(
+    offer.offerBackgroundImage,
+    fit: BoxFit.cover,
+  ),
+),		
+		  
+		  
+		  
+            // Large soft orange glow on the right.
+            Positioned(
+              right: -35,
+              top: -48,
+              child: IgnorePointer(
+                child: Container(
+                  width: 135,
+                  height: 135,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: accent.withOpacity(.18),
+                  ),
+                ),
+              ),
+            ),
+
+            // Soft white glow at the bottom-left.
+            Positioned(
+              left: -58,
+              bottom: -72,
+              child: IgnorePointer(
+                child: Container(
+                  width: 145,
+                  height: 145,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0x70FFFFFF),
+                  ),
+                ),
+              ),
+            ),
+
+            // Small decorative dots.
+            Positioned(
+              right: 78,
+              top: 15,
+              child: Container(
+                width: 7,
+                height: 7,
+                decoration: BoxDecoration(
+                  color: accent.withOpacity(.42),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+            Positioned(
+              right: 62,
+              top: 28,
+              child: Container(
+                width: 4,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: accent.withOpacity(.34),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                12,
+                12,
+                14,
+                12,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Promotional image — controlled from JSON.
+                  Container(
+                    width: 78,
+                    height: 78,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(.95),
+                      borderRadius: BorderRadius.circular(19),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(.95),
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: accent.withOpacity(.20),
+                          blurRadius: 13,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Image.network(
+                        offer.imageUrl,
+                        fit: BoxFit.contain,
+                        errorBuilder: (_, __, ___) {
+                          return Icon(
+                            offer.icon,
+                            size: 34,
+                            color: accent,
+                          );
+                        },
+                        loadingBuilder: (
+                          context,
+                          child,
+                          loadingProgress,
+                        ) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+
+                          return Center(
+                            child: SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: accent,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // LIMITED OFFER badge.
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: accent,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: accent.withOpacity(.25),
+                                blurRadius: 7,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.local_fire_department_rounded,
+                                size: 21,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                offer.badge,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17.5,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: .10,
+                                  height: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 7),
+
+                        // Main sentence.
+                        Text(
+                          offer.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: titleColor,
+                            fontSize: 19.5,
+                            height: 1.08,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: -.15,
+                          ),
+                        ),
+
+                        const SizedBox(height: 0),
+
+                        // Big discount — intentionally separated so it
+                        // has the same visual hierarchy as the reference.
+                      /*  FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                / *TextSpan(
+                                  text: offer.discountAmount,
+                                  style: const TextStyle(
+                                    color: amountColor,
+                                    fontSize: 30,
+                                    height: 2.0,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: -.65,
+                                  ),
+                                ),
+	TextSpan(
+  text: offer.discountAmount,
+  style: const TextStyle(
+    color: Color(0xFFE7460D),
+    fontSize: 32,
+    height: 0.98,
+    fontWeight: FontWeight.w900,
+    letterSpacing: -0.8,
+  ),
+),* /
+
+TextSpan(
+  text: offer.discountAmount,
+  style: TextStyle(
+    fontSize: 30,
+    height: 1.0,
+    fontWeight: FontWeight.w900,
+    letterSpacing: -0.65,
+
+    // White outline + orange 3D shadow
+    foreground: Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 5
+      ..color = Colors.white,
+
+    shadows: const [
+      Shadow(
+        color: Color(0xFFB83208),
+        blurRadius: 0,
+        offset: Offset(0, 4),
+      ),
+      Shadow(
+        color: Color(0x66000000),
+        blurRadius: 4,
+        offset: Offset(2, 5),
+      ),
+    ],
+  ),
+),
+
+                                const TextSpan(
+                                  text: ' ',
+                                ),
+                            
+								
+								TextSpan(
+  text: offer.discountLabel,
+  style: const TextStyle(
+    color: Color(0xFF8D2112),
+    fontSize: 34,
+    height: 0.98,
+    fontWeight: FontWeight.w900,
+    letterSpacing: -0.3,
+  ),
+),
+                              ],
+                            ),
+                          ),
+                        ),  */
+						
+						
+						
+						
+						
+						
+FittedBox(
+  fit: BoxFit.scaleDown,
+  alignment: Alignment.centerLeft,
+  child: Row(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      // =====================================================
+      // ₹10 - REAL 3D TEXT EFFECT
+      // =====================================================
+      SizedBox(
+        width: 72,
+        height: 40,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // 1️⃣ DARK ORANGE 3D DEPTH
+            Positioned(
+              left: 2,
+              top: 4,
+              child: Text(
+                offer.discountAmount,
+                style: const TextStyle(
+                  color: Color(0xFFB83208),
+                  fontSize: 32,
+                  height: 1,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -0.8,
+                ),
+              ),
+            ),
+
+            // 2️⃣ WHITE THICK OUTLINE
+            Text(
+              offer.discountAmount,
+              style: TextStyle(
+                fontSize: 32,
+                height: 1,
+                fontWeight: FontWeight.w900,
+                letterSpacing: -0.8,
+                foreground: Paint()
+                  ..style = PaintingStyle.stroke
+                  ..strokeWidth = 5
+                  ..color = Colors.white,
+              ),
+            ),
+
+            // 3️⃣ ACTUAL ORANGE FACE
+            Text(
+              offer.discountAmount,
+              style: const TextStyle(
+                color: Color(0xFFFF3B08),
+                fontSize: 32,
+                height: 1,
+                fontWeight: FontWeight.w900,
+                letterSpacing: -0.8,
+                shadows: [
+                  Shadow(
+                    color: Color(0x55000000),
+                    blurRadius: 2,
+                    offset: Offset(1, 2),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      const SizedBox(width: 2),
+
+      // =====================================================
+      // FLAT DISCOUNT
+      // =====================================================
+      Text(
+        offer.discountLabel,
+        style: const TextStyle(
+          color: Color(0xFF8D2112),
+          fontSize: 34,
+          height: 0.98,
+          fontWeight: FontWeight.w900,
+          letterSpacing: -0.3,
+        ),
+      ),
+    ],
+  ),
+),		
+						
+						
+						
+						
+						
+						
+						
+						
+						
+
+                        const SizedBox(height: 3),
+
+                        Text(
+                          offer.subtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: subtitleColor,
+                            fontSize: 14.5,
+                            height: 1.15,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
