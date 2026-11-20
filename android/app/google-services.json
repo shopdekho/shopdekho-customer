@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "29236464072",
+    "project_id": "shopdekho-customer",
+    "storage_bucket": "shopdekho-customer.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29236464072:android:73e056425e8d400d60d8fd",
+        "android_client_info": {
+          "package_name": "in.visibleon.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "29236464072-2ers7big5ktd3nplseo7tomft6n0mej1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7u9ar7jcMpzzW2xYVD9C31q20Gg-Zlds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "29236464072-2ers7big5ktd3nplseo7tomft6n0mej1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
