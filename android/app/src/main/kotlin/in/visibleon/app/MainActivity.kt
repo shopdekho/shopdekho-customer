@@ -1,4 +1,4 @@
-package in.visibleon.app
+package `in`.visibleon.app
 
 import io.flutter.embedding.android.FlutterActivity
 
