@@ -44,9 +44,14 @@ class ShopDekhoApp extends StatelessWidget {
             return const VisibleOnSplash();
           }
 
-          if (snapshot.hasError) {
-            return const StartupErrorScreen();
-          }
+if (snapshot.hasError) {
+  debugPrint('STARTUP ERROR: ${snapshot.error}');
+  debugPrint('STARTUP STACK: ${snapshot.stackTrace}');
+
+  return StartupErrorScreen(
+    error: snapshot.error.toString(),
+  );
+}
 
           return const HomeScreen();
         },
@@ -370,21 +375,50 @@ class VisibleOnBackgroundPainter extends CustomPainter {
 
 
 class StartupErrorScreen extends StatelessWidget {
-  const StartupErrorScreen({super.key});
+  final String error;
+
+  const StartupErrorScreen({
+    super.key,
+    required this.error,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color(0xFF123D32),
-      body: Center(
+    return Scaffold(
+      backgroundColor: const Color(0xFF123D32),
+      body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(24),
-          child: Text(
-            'App start nahi ho paya.\nPlease try again.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
+          padding: const EdgeInsets.all(24),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    color: Colors.redAccent,
+                    size: 45,
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Startup Error',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SelectableText(
+                    error,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
