@@ -15,13 +15,19 @@ void main() {
   runApp(ShopDekhoApp(startupFuture: startupFuture));
 }
 
-Future<void> initializeApp() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
 
-  NotificationService.init();
+Future<void> initializeApp() async {
+  // Firebase ko dobara initialize hone se bachayein
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+
+  // Notification initialization complete hone ka wait karein
+  await NotificationService.init();
 }
+
 
 class ShopDekhoApp extends StatelessWidget {
   final Future<void> startupFuture;
