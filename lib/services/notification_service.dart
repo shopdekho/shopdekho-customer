@@ -217,8 +217,16 @@ class NotificationService {
 /// Registered once in main.dart via:
 ///   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 @pragma('vm:entry-point')
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+Future<void> firebaseMessagingBackgroundHandler(
+    RemoteMessage message) async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+
   await NotificationService._recordNotification(message);
 }
+
